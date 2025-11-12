@@ -244,9 +244,7 @@ if (globeCanvas) {
     function initGlobeNodes() {
         globeState.nodes = [];
         globeState.branches = [];
-        
-        // Reduce node count on mobile for better performance
-        const numNodes = isMobile ? 25 : 40;
+        const numNodes = 40;
         const sphereRadius = 60;
         
         // Create nodes arranged in a sphere
@@ -274,10 +272,10 @@ if (globeCanvas) {
             globeState.nodes.push(node);
         }
         
-        // Create branching connections (reduce on mobile)
+        // Create branching connections
         globeState.nodes.forEach((node, idx) => {
-            if (Math.random() < (isMobile ? 0.2 : 0.3)) {
-                const branchCount = Math.floor(Math.random() * (isMobile ? 2 : 3)) + 1;
+            if (Math.random() < 0.3) {
+                const branchCount = Math.floor(Math.random() * 3) + 1;
                 for (let b = 0; b < branchCount; b++) {
                     globeState.branches.push({
                         fromNode: idx,
@@ -679,19 +677,16 @@ document.head.appendChild(style);
 // PARALLAX EFFECT
 // ============================
 
-// Detect if device is mobile
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-// Parallax effect for globe canvas (minor mouse interaction) - disabled on mobile
+// Parallax effect for globe canvas (minor mouse interaction)
 const globeCanvasElement = document.getElementById('globeNetworkCanvas');
 
-if (!isMobile && globeCanvasElement && globeCtx) {
-    window.addEventListener('mousemove', (e) => {
+window.addEventListener('mousemove', (e) => {
+    if (globeCanvasElement && globeCtx) {
         const x = (e.clientX / window.innerWidth) * 5;
         const y = (e.clientY / window.innerHeight) * 5;
         globeCanvasElement.style.transform = `translateX(calc(${x}px)) translateY(calc(${y}px))`;
-    });
-}
+    }
+});
 
 // ============================
 // SMOOTH SCROLL FOR BUTTONS
